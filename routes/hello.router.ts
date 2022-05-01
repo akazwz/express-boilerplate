@@ -1,10 +1,6 @@
-import express, {Request, Response} from 'express'
+import express from 'express'
+import helloController from '../controllers/hello.controller'
 
 export const helloRouter = express.Router()
 
-helloRouter.get('/', async (req:Request, res:Response)=>{
-	console.log(req.protocol)
-	res.status(200).json({
-		msg: "Hello, World!"
-	})
-})
+helloRouter.get('/', helloController.handleGet)
