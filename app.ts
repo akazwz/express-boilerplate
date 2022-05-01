@@ -5,7 +5,9 @@ import cors from 'cors'
 import { helloRouter } from './routes/hello.router'
 
 // get .env config
-dotenv.config()
+dotenv.config({
+	path: process.env.NODE_ENV === 'production' ? '.env' : '.dev.env'
+})
 
 // PORT
 const PORT:number = parseInt(process.env.PORT as string, 10) || 7000
