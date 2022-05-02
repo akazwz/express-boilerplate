@@ -1,7 +1,7 @@
 import { Knex, knex } from 'knex'
 
 const config:Knex.Config = {
-	client: process.env.DB_CLIENT,
+	client: 'mysql2',
 	connection: {
 		host: process.env.DB_HOST,
 		port: Number(process.env.DB_PORT),
@@ -9,8 +9,14 @@ const config:Knex.Config = {
 		user: process.env.DB_USER,
 		password: process.env.DB_PASSWORD,
 	},
+	migrations: {
+		directory: './knex/migrations',
+		loadExtensions: ['.ts'],
+	},
+	seeds: {
+		directory: './knex/seeds',
+		loadExtensions: ['.ts'],
+	},
 }
-const db = knex(config)
-
-export default db
+export const db:Knex = knex(config)
 
