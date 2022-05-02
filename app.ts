@@ -6,7 +6,8 @@ import { helloRouter } from './routes/hello.router'
 
 // get .env config
 dotenv.config({
-	path: process.env.NODE_ENV === 'production' ? '.env' : '.dev.env'
+	/* prod and dev env config */
+	path: process.env.NODE_ENV === 'production' ? '.env' : '.env'
 })
 
 // PORT
