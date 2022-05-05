@@ -5,11 +5,11 @@ const prisma = new PrismaClient()
 
 const findProfile = async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		const username = req.username
+		const uid = req.uid
 
 		const user = await prisma.user.findFirst({
 			where: {
-				username,
+				id: uid,
 			}
 		})
 
@@ -39,11 +39,10 @@ const findProfile = async (req: Request, res: Response, next: NextFunction) => {
 
 const createProfile = async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		const username = req.username
-
+		const uid = req.uid
 		const user = await prisma.user.findFirst({
 			where: {
-				username,
+				id: uid,
 			}
 		})
 
@@ -86,14 +85,12 @@ const createProfile = async (req: Request, res: Response, next: NextFunction) =>
 
 const updateProfile = async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		const username = req.username
-		console.log(username)
-
+		const uid = req.uid
 		const { bio, avatar } = req.body
 
 		const user = await prisma.user.findFirst({
 			where: {
-				username,
+				id: uid,
 			}
 		})
 
