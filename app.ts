@@ -9,7 +9,6 @@ dotenv.config({
 })
 
 import { helloRouter } from './routes/hello.router'
-import { db } from './knex/knex'
 
 // PORT
 const PORT:number = parseInt(process.env.PORT as string, 10) || 7000
@@ -26,5 +25,4 @@ app.use('/hello', helloRouter)
 // run app
 app.listen(PORT, async () => {
 	console.log(`express run at :${PORT}`)
-	await db.migrate.up()
 })
