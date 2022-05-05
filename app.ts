@@ -8,10 +8,12 @@ dotenv.config({
 	path: process.env.NODE_ENV === 'production' ? '.env' : '.env'
 })
 
+// routers
 import { helloRouter } from './routes/hello.router'
+import { healthRouter } from './routes/heathz.router'
 
 // PORT
-const PORT:number = parseInt(process.env.PORT as string, 10) || 7000
+const PORT: number = parseInt(process.env.PORT as string, 10) || 7000
 
 const app = express()
 
@@ -21,6 +23,7 @@ app.use(cors())
 
 /* routers */
 app.use('/hello', helloRouter)
+app.use('/healthz', healthRouter)
 
 // run app
 app.listen(PORT, async () => {
