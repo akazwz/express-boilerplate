@@ -15,6 +15,8 @@ import idController from './controllers/id.controller'
 import { helloRouter } from './routes/hello.router'
 import { healthRouter } from './routes/heathz.router'
 import { authRouter } from './routes/auth.router'
+import { jwtAuth } from './middleware/auth'
+import { userRouter } from './routes/user.router'
 
 // PORT
 const PORT: number = parseInt(process.env.PORT as string, 10) || 7000
@@ -27,12 +29,14 @@ app.set('trust proxy', true)
 // cors
 app.use(cors())
 app.use(express.json())
-app.use(express.urlencoded({extended: true}))
+app.use(express.urlencoded({ extended: true }))
 
 /* routers */
 app.use('/hello', helloRouter)
 app.use('/healthz', healthRouter)
 app.use('/auth', authRouter)
+// parse user by jwt in header
+app.use('/user', jwtAuth, userRouter)
 // 7 numbers a-z A-Z _ - regex
 app.get(`/:id([0-9a-zA-Z_-]{7})`, idController.handleDirect)
 
