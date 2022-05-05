@@ -8,12 +8,13 @@ dotenv.config({
 	path: process.env.NODE_ENV === 'production' ? '.env' : '.env'
 })
 
+// short id redirect controller
+import idController from './controllers/id.controller'
+
 // routers
 import { helloRouter } from './routes/hello.router'
 import { healthRouter } from './routes/heathz.router'
-
-// short id redirect controller
-import idController from './controllers/id.controller'
+import { authRouter } from './routes/auth.router'
 
 // PORT
 const PORT: number = parseInt(process.env.PORT as string, 10) || 7000
@@ -25,10 +26,13 @@ app.set('trust proxy', true)
 /* middlewares */
 // cors
 app.use(cors())
+app.use(express.json())
+app.use(express.urlencoded({extended: true}))
 
 /* routers */
 app.use('/hello', helloRouter)
 app.use('/healthz', healthRouter)
+app.use('/auth', authRouter)
 // 7 numbers a-z A-Z _ - regex
 app.get(`/:id([0-9a-zA-Z_-]{7})`, idController.handleDirect)
 
