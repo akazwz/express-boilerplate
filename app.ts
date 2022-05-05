@@ -12,6 +12,9 @@ dotenv.config({
 import { helloRouter } from './routes/hello.router'
 import { healthRouter } from './routes/heathz.router'
 
+// short id redirect controller
+import idController from './controllers/id.controller'
+
 // PORT
 const PORT: number = parseInt(process.env.PORT as string, 10) || 7000
 
@@ -26,6 +29,8 @@ app.use(cors())
 /* routers */
 app.use('/hello', helloRouter)
 app.use('/healthz', healthRouter)
+// 7 numbers a-z A-Z _ - regex
+app.get(`/:id([0-9a-zA-Z_-]{7})`, idController.handleDirect)
 
 // run app
 app.listen(PORT, async () => {
