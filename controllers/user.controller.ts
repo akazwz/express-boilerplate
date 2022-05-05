@@ -19,6 +19,8 @@ const findProfile = async (req: Request, res: Response, next: NextFunction) => {
 			})
 		}
 
+		console.log(user.id)
+
 		const profile = await prisma.profile.findFirst({
 			where: {
 				userId: user.id,

@@ -28,7 +28,13 @@ export const jwtAuth = (req: Request, res: Response, next: NextFunction) => {
 				msg: 'token error',
 			})
 		}
-		req.uid = payLoad.uid
+		const uid = payLoad.uid
+		if (!uid) {
+			return res.status(401).json({
+				msg: 'token error',
+			})
+		}
+		req.uid = uid
 		next()
 	} catch (e) {
 		console.log(e)
