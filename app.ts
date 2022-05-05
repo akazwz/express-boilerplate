@@ -17,6 +17,8 @@ const PORT: number = parseInt(process.env.PORT as string, 10) || 7000
 
 const app = express()
 
+app.set('trust proxy', true)
+
 /* middlewares */
 // cors
 app.use(cors())
