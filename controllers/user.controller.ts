@@ -1,31 +1,26 @@
 import { Request, Response, NextFunction } from 'express'
-import { PrismaClient } from '@prisma/client'
 
-const prisma = new PrismaClient()
+import userService from '../services/user.service'
 
+// find profile
 const findProfile = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const uid = req.uid
 
-		const user = await prisma.user.findFirst({
-			where: {
-				id: uid,
-			}
-		})
-
+		const user = await userService.findUserByUID(uid)
 		if (!user) {
 			return res.status(400).json({
 				msg: 'no such user'
 			})
 		}
 
-		console.log(user.id)
+		const profile = await userService.findProfileByUID(uid)
 
-		const profile = await prisma.profile.findFirst({
-			where: {
-				userId: user.id,
-			}
-		})
+		if (!profile) {
+			return res.status(400).json({
+				msg: 'no such profile'
+			})
+		}
 
 		return res.status(200).json({
 			msg: 'success',
@@ -42,11 +37,7 @@ const findProfile = async (req: Request, res: Response, next: NextFunction) => {
 const createProfile = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const uid = req.uid
-		const user = await prisma.user.findFirst({
-			where: {
-				id: uid,
-			}
-		})
+		const user = await userService.findUserByUID(uid)
 
 		if (!user) {
 			return res.status(400).json({
@@ -54,11 +45,7 @@ const createProfile = async (req: Request, res: Response, next: NextFunction) =>
 			})
 		}
 
-		const profile = await prisma.profile.findFirst({
-			where: {
-				userId: user.id,
-			}
-		})
+		const profile = await userService.findProfileByUID(uid)
 
 		if (profile) {
 			return res.status(400).json({
@@ -68,16 +55,23 @@ const createProfile = async (req: Request, res: Response, next: NextFunction) =>
 
 		const { bio, avatar } = req.body
 
-		await prisma.profile.create({
-			data: {
-				userId: user.id,
-				bio,
-				avatar,
-			}
+		const profileCreated = await userService.createProfile({
+			bio: bio,
+			avatar: avatar,
+			userId: uid,
 		})
+
+		if (!profileCreated) {
+			return res.status(400).json({
+				msg: 'create profile error',
+			})
+		}
 
 		return res.status(200).json({
 			msg: 'success',
+			data: {
+				profile: profileCreated,
+			}
 		})
 	} catch (e: any) {
 		console.log(e.message)
@@ -90,11 +84,7 @@ const updateProfile = async (req: Request, res: Response, next: NextFunction) =>
 		const uid = req.uid
 		const { bio, avatar } = req.body
 
-		const user = await prisma.user.findFirst({
-			where: {
-				id: uid,
-			}
-		})
+		const user = await userService.findUserByUID(uid)
 
 		if (!user) {
 			return res.status(400).json({
@@ -102,15 +92,17 @@ const updateProfile = async (req: Request, res: Response, next: NextFunction) =>
 			})
 		}
 
-		await prisma.profile.update({
-			where: {
-				userId: user.id,
-			},
-			data: {
-				bio,
-				avatar,
-			}
+		const isUpdated = await userService.updateProfile({
+			bio,
+			avatar,
+			userId: uid,
 		})
+
+		if (!isUpdated) {
+			return res.status(400).json({
+				msg: 'update profile error'
+			})
+		}
 
 		return res.status(200).json({
 			msg: 'success',

@@ -1,11 +1,10 @@
 import { Request, Response, NextFunction } from 'express'
-import { PrismaClient } from '@prisma/client'
 
 import authService from '../services/auth.service'
+import prisma from '../prisma/client'
 
-const prisma = new PrismaClient()
 
-const register = async (req: Request, res: Response, next: NextFunction) => {
+const signUp = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const { username, password } = req.body
 		// find username
@@ -21,7 +20,7 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
 			})
 		}
 
-		const isSuccess = await authService.registerByUsernamePwd(username, password)
+		const isSuccess = await authService.signupByUsernamePwd(username, password)
 
 		if (!isSuccess) {
 			return res.status(400).json({
@@ -38,7 +37,7 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
 	}
 }
 
-const login = async (req: Request, res: Response, next: NextFunction) => {
+const signIn = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const { username, password } = req.body
 		const token = await authService.loginByUsernamePwd(username, password)
@@ -60,6 +59,6 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
 }
 
 export default {
-	register,
-	login,
+	signUp,
+	signIn,
 }

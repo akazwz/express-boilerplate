@@ -3,19 +3,20 @@ import JWT from 'jsonwebtoken'
 
 export const jwtAuth = (req: Request, res: Response, next: NextFunction) => {
 	try {
-		const bearerToken = req.header('Authorization')
+		const bearerToken = req.headers.authorization
 		if (!bearerToken) {
 			return res.status(401).json({
 				msg: 'no token',
 			})
 		}
+
 		const isValidBearerToken = bearerToken.startsWith('Bearer ')
 		if (!isValidBearerToken) {
 			return res.status(401).json({
 				msg: 'not bearer token',
 			})
 		}
-		const token = bearerToken.slice(7)
+		const token = bearerToken.split(' ')[1]
 		const secret = process.env.JWT_SECRET
 		if (!secret) {
 			return res.status(401).json({

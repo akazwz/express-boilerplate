@@ -1,11 +1,9 @@
 import bcrypt from 'bcrypt'
-import { PrismaClient } from '@prisma/client'
 
 import { signToken } from '../utils'
+import prisma from '../prisma/client'
 
-const prisma = new PrismaClient()
-
-const registerByUsernamePwd = async (username: string, password: string): Promise<boolean> => {
+const signupByUsernamePwd = async (username: string, password: string): Promise<boolean> => {
 	const hashedPassword = await bcrypt.hash(password, 10)
 
 	try {
@@ -23,7 +21,7 @@ const registerByUsernamePwd = async (username: string, password: string): Promis
 
 const loginByUsernamePwd = async (username: string, password: string): Promise<string | null> => {
 	try {
-		const user = await prisma.user.findFirst({
+		const user = await prisma.user.findUnique({
 			where: {
 				username,
 			}
@@ -33,7 +31,7 @@ const loginByUsernamePwd = async (username: string, password: string): Promise<s
 			return null
 		}
 
-		const isPwdCorrect = bcrypt.compare(password, user.password)
+		const isPwdCorrect = await bcrypt.compare(password, user.password)
 		if (!isPwdCorrect) {
 			return null
 		}
@@ -46,6 +44,6 @@ const loginByUsernamePwd = async (username: string, password: string): Promise<s
 }
 
 export default {
-	registerByUsernamePwd,
+	signupByUsernamePwd,
 	loginByUsernamePwd,
 }
