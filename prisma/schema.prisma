@@ -10,15 +10,17 @@ datasource db {
 }
 
 model User {
-  id              String     @id @default(uuid())
-  createdAt       DateTime   @default(now())
-  updatedAt       DateTime   @updatedAt
-  username        String     @unique
+  id              String    @id @default(uuid())
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  username        String    @unique
+  password        String
+  banned          Boolean   @default(false)
+  role            Role      @default(USER)
   email           String?
   emailVerifiedAt DateTime?
   phone           String?
   phoneVerifiedAt DateTime?
-  password        String
   profile         Profile?
 }
 
@@ -30,3 +32,7 @@ model Profile {
   user   User    @relation(fields: [userId], references: [id])
 }
 
+enum Role {
+  USER
+  ADMIN
+}
