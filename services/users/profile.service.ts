@@ -1,14 +1,6 @@
 import { Prisma } from '@prisma/client'
 
-import prisma from '../prisma/client'
-
-const findUserByUID = async (uid: string): Promise<Prisma.UserGetPayload<{}> | null> => {
-	return await prisma.user.findUnique(({
-		where: {
-			id: uid,
-		}
-	}))
-}
+import prisma from '../../prisma/client'
 
 const findProfileByUID = async (uid: string): Promise<Prisma.ProfileGetPayload<{}> | null> => {
 	return await prisma.profile.findUnique({
@@ -51,7 +43,6 @@ const updateProfile = async (profile: Prisma.ProfileUncheckedUpdateInput): Promi
 }
 
 export default {
-	findUserByUID,
 	findProfileByUID,
 	createProfile,
 	updateProfile,

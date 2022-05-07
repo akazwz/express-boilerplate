@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 
-import userService from '../services/user.service'
+import profileService from '../../services/users/profile.service'
+import userService from '../../services/users/user.service'
 
 // find profile
 const findProfile = async (req: Request, res: Response, next: NextFunction) => {
@@ -14,7 +15,7 @@ const findProfile = async (req: Request, res: Response, next: NextFunction) => {
 			})
 		}
 
-		const profile = await userService.findProfileByUID(uid)
+		const profile = await profileService.findProfileByUID(uid)
 
 		if (!profile) {
 			return res.status(400).json({
@@ -45,7 +46,7 @@ const createProfile = async (req: Request, res: Response, next: NextFunction) =>
 			})
 		}
 
-		const profile = await userService.findProfileByUID(uid)
+		const profile = await profileService.findProfileByUID(uid)
 
 		if (profile) {
 			return res.status(400).json({
@@ -55,7 +56,7 @@ const createProfile = async (req: Request, res: Response, next: NextFunction) =>
 
 		const { bio, avatar } = req.body
 
-		const profileCreated = await userService.createProfile({
+		const profileCreated = await profileService.createProfile({
 			bio: bio,
 			avatar: avatar,
 			userId: uid,
@@ -92,7 +93,7 @@ const updateProfile = async (req: Request, res: Response, next: NextFunction) =>
 			})
 		}
 
-		const isUpdated = await userService.updateProfile({
+		const isUpdated = await profileService.updateProfile({
 			bio,
 			avatar,
 			userId: uid,
