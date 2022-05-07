@@ -1,7 +1,9 @@
 import { NextFunction, Request, Response } from 'express'
 import JWT from 'jsonwebtoken'
 
-export const jwtAuth = (req: Request, res: Response, next: NextFunction) => {
+import userService from '../services/users/user.service'
+
+export const jwtAuth = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const bearerToken = req.headers.authorization
 		if (!bearerToken) {
@@ -43,4 +45,15 @@ export const jwtAuth = (req: Request, res: Response, next: NextFunction) => {
 			msg: 'invalid token',
 		})
 	}
+}
+
+export const adminAuth = async (req: Request, res: Response, next: NextFunction) => {
+	const uid = req.uid
+	const isAdmin = await userService.isAdmin(uid)
+	if (!isAdmin) {
+		return res.status(403).json({
+			msg: 'permission forbidden',
+		})
+	}
+	next()
 }

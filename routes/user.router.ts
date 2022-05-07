@@ -1,9 +1,14 @@
 import express from 'express'
 
-import userController from '../controllers/user.controller'
+import userController from '../controllers/users/user.controller'
+import profileController from '../controllers/users/profile.controller'
+import { adminAuth } from '../middleware/auth'
 
 export const userRouter = express.Router()
 
-userRouter.get('/profile', userController.findProfile)
-userRouter.post('/profile', userController.createProfile)
-userRouter.put('/profile', userController.updateProfile)
+userRouter.get('/profile', profileController.findProfile)
+userRouter.post('/profile', profileController.createProfile)
+userRouter.put('/profile', profileController.updateProfile)
+
+// only admin can ban users
+userRouter.post('/:uid/banned', adminAuth, userController.banUser)

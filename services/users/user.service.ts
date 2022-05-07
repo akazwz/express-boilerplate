@@ -27,7 +27,25 @@ const banUserByUID = async (uid: string): Promise<boolean> => {
 	}
 }
 
+const isAdmin = async (uid: string): Promise<boolean> => {
+	try {
+		const user = await prisma.user.findUnique({
+			where: {
+				id: uid,
+			},
+			select: {
+				role: true,
+			},
+		})
+		return user?.role === 'ADMIN'
+	} catch (e) {
+		console.log(e)
+		return false
+	}
+}
+
 export default {
 	findUserByUID,
 	banUserByUID,
+	isAdmin,
 }
