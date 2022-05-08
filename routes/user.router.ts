@@ -12,4 +12,4 @@ userRouter.put('/profile', profileController.updateProfile)
 
 // only admin can ban users
 userRouter.post('/:uid/banned', adminAuth, userController.banUser)
-userRouter.post('/', adminAuth, userController.findUsers)
+userRouter.get('/', adminAuth, userController.findUsers)
