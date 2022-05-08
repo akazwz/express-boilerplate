@@ -36,7 +36,7 @@ app.use('/hello', helloRouter)
 app.use('/healthz', healthRouter)
 app.use('/auth', authRouter)
 // parse user by jwt in header
-app.use('/user', jwtAuth, userRouter)
+app.use('/users', jwtAuth, userRouter)
 // 7 numbers a-z A-Z _ - regex
 app.get(`/:id([0-9a-zA-Z_-]{7})`, idController.handleDirect)
 

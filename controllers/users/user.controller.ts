@@ -21,6 +21,23 @@ const banUser = async (req: Request, res: Response, next: NextFunction) => {
 	}
 }
 
+const findUsers = async (req: Request, res: Response, next: NextFunction) => {
+	try {
+		const { page } = req.params
+		const users = await userService.findUsers(Number(page) * 20 || 0, 20)
+		return res.status(200).json({
+			msg: 'success',
+			data: {
+				users,
+			}
+		})
+	} catch (e) {
+		console.log(e)
+		next(e)
+	}
+}
+
 export default {
 	banUser,
+	findUsers,
 }

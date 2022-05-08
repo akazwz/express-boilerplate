@@ -10,6 +10,13 @@ const findUserByUID = async (uid: string): Promise<Prisma.UserGetPayload<{}> | n
 	}))
 }
 
+const findUsers = async (skip: number, take: number): Promise<Prisma.UserGetPayload<{}>[]> => {
+	return await prisma.user.findMany({
+		skip: skip,
+		take: take,
+	})
+}
+
 const banUserByUID = async (uid: string): Promise<boolean> => {
 	try {
 		await prisma.user.update({
@@ -46,6 +53,7 @@ const isAdmin = async (uid: string): Promise<boolean> => {
 
 export default {
 	findUserByUID,
+	findUsers,
 	banUserByUID,
 	isAdmin,
 }
