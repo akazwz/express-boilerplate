@@ -24,7 +24,8 @@ const banUser = async (req: Request, res: Response, next: NextFunction) => {
 const findUsers = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const { page } = req.params
-		const users = await userService.findUsers(Number(page) * 20 || 0, 20)
+		const pageCount = Number(process.env.PAGE_COUNT) || 20
+		const users = await userService.findUsers(Number(page) * pageCount || 0, pageCount)
 		return res.status(200).json({
 			msg: 'success',
 			data: {
