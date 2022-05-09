@@ -12,10 +12,12 @@ This is a simple express typescript boilerplate.
 
 ### REST api
 
-1. POST auth/signup
-2. POST auth/login
-3. GET POST PUT user/profile
-4. GET /healthz
+1. POST /auth/signup
+2. POST /auth/login
+3. GET POST PUT /users/profile
+4. GET /users
+5. POST /users/:uid/banned
+6. GET /healthz
 
 ### JWT Auth Middleware
 
